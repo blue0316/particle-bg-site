@@ -99,7 +99,7 @@ function AnimatedGradientBackground(props) {
     controls.target.set(0, randomInteger(75, 125), 0);
 
     // Disable controls to prevent further user interaction
-    controls.enabled = true;
+    controls.enabled = false;
 
     // Enable damping for smooth animations
     controls.enableDamping = true;
@@ -281,10 +281,10 @@ function AnimatedGradientBackground(props) {
 
   return (
     <div ref={containerRef} className="relative w-screen h-screen">
-      {/* <div className="absolute top-0 left-0 w-screen h-screen bg-black opacity-20" />
+      <div className="absolute top-0 left-0 w-screen h-screen bg-black opacity-20" />
       <div className="absolute top-0 left-0 w-screen h-screen">
         {props.children}
-      </div> */}
+      </div>
     </div>
   );
 }
