@@ -143,7 +143,7 @@ function AnimatedGradientBackground(props) {
 
     const geometry = new THREE.PlaneGeometry(
       window.innerWidth / 2,
-      400,
+      window.innerHeight / 2.5,
       100,
       100
     );
