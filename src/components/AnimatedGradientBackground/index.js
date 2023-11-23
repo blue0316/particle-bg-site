@@ -234,8 +234,8 @@ function AnimatedGradientBackground(props) {
           }
         }
 
-        j += 0.01;
-        t += 0.05;
+        j += 0.001;
+        t += 0.03;
       };
 
       let t = 0;
