@@ -1,82 +1,111 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 function AnimatedGradientBackground(props) {
   const containerRef = useRef(null);
 
+  const [width, setWidth] = useState(window.innerWidth);
+  const [height, setHeight] = useState(window.innerHeight);
+
+  const handleResize = () => {
+    setWidth(window.innerWidth);
+    setHeight(window.innerHeight);
+  };
+
   useEffect(() => {
     const canvasElement = document.querySelector("canvas");
     if (!canvasElement) {
-      console.log("Here is useEffect.");
-      // Create a scene
-      const scene = new THREE.Scene();
+      makeCanvas();
+    }
 
-      // Create a perspective camera
-      const camera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000
+    // Initial setup
+    handleResize();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    const canvasElement = document.querySelector("canvas");
+    if (canvasElement) {
+      canvasElement.remove();
+    }
+    makeCanvas();
+  }, [width, height]);
+
+  const makeCanvas = () => {
+    // Create a scene
+    const scene = new THREE.Scene();
+
+    // Create a perspective camera
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    camera.position.y = 300;
+
+    // Create a WebGLRenderer
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    // Append the renderer's DOM element to the container
+    containerRef.current.appendChild(renderer.domElement);
+
+    // Create OrbitControls and pass the camera and renderer
+    const controls = new OrbitControls(camera, renderer.domElement);
+
+    // Set the controls target to the center of the scene
+    controls.target.set(0, 0, 0);
+
+    // Disable controls to prevent further user interaction
+    controls.enabled = false;
+
+    // Enable damping for smooth animations
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+
+    let vCheck = false;
+
+    const randomInteger = (min, max) => {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+
+    const rgb = (r, g, b) => {
+      return new THREE.Vector3(r, g, b);
+    };
+
+    const R = (x, y, t) => {
+      return Math.floor(192 + 64 * Math.cos((x * x - y * y) / 300 + t));
+    };
+
+    const G = (x, y, t) => {
+      return Math.floor(
+        192 +
+          64 *
+            Math.sin((x * x * Math.cos(t / 4) + y * y * Math.sin(t / 3)) / 300)
       );
-      camera.position.y = 300;
+    };
 
-      // Create a WebGLRenderer
-      const renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+    const B = (x, y, t) => {
+      return Math.floor(
+        192 +
+          64 *
+            Math.sin(
+              5 * Math.sin(t / 9) +
+                ((x - 100) * (x - 100) + (y - 100) * (y - 100)) / 1100
+            )
+      );
+    };
 
-      // Append the renderer's DOM element to the container
-      containerRef.current.appendChild(renderer.domElement);
-
-      // Create OrbitControls and pass the camera and renderer
-      const controls = new OrbitControls(camera, renderer.domElement);
-
-      // Set the controls target to the center of the scene
-      controls.target.set(0, 0, 0);
-
-      // Disable controls to prevent further user interaction
-      controls.enabled = false;
-
-      // Enable damping for smooth animations
-      controls.enableDamping = true;
-      controls.dampingFactor = 0.25;
-
-      let vCheck = false;
-
-      const randomInteger = (min, max) => {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-      };
-
-      const rgb = (r, g, b) => {
-        return new THREE.Vector3(r, g, b);
-      };
-
-      const R = (x, y, t) => {
-        return Math.floor(192 + 64 * Math.cos((x * x - y * y) / 300 + t));
-      };
-
-      const G = (x, y, t) => {
-        return Math.floor(
-          192 +
-            64 *
-              Math.sin(
-                (x * x * Math.cos(t / 4) + y * y * Math.sin(t / 3)) / 300
-              )
-        );
-      };
-
-      const B = (x, y, t) => {
-        return Math.floor(
-          192 +
-            64 *
-              Math.sin(
-                5 * Math.sin(t / 9) +
-                  ((x - 100) * (x - 100) + (y - 100) * (y - 100)) / 1100
-              )
-        );
-      };
-
-      const sNoise = `
+    const sNoise = `
             // Insert snoise function here
             vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
             vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -112,24 +141,24 @@ function AnimatedGradientBackground(props) {
             }
         `;
 
-      const geometry = new THREE.PlaneGeometry(
-        window.innerWidth / 2,
-        400,
-        100,
-        100
-      );
-      const material = new THREE.ShaderMaterial({
-        uniforms: {
-          u_bg: { type: "v3", value: rgb(162, 138, 241) },
-          u_bgMain: { type: "v3", value: rgb(162, 138, 241) },
-          u_color1: { type: "v3", value: rgb(162, 138, 241) },
-          u_color2: { type: "v3", value: rgb(82, 31, 241) },
-          u_time: { type: "f", value: 30 },
-          u_randomisePosition: { type: "v2", value: new THREE.Vector2(1, 2) },
-        },
-        fragmentShader:
-          sNoise +
-          `
+    const geometry = new THREE.PlaneGeometry(
+      window.innerWidth / 2,
+      400,
+      100,
+      100
+    );
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        u_bg: { type: "v3", value: rgb(162, 138, 241) },
+        u_bgMain: { type: "v3", value: rgb(162, 138, 241) },
+        u_color1: { type: "v3", value: rgb(162, 138, 241) },
+        u_color2: { type: "v3", value: rgb(82, 31, 241) },
+        u_time: { type: "f", value: 30 },
+        u_randomisePosition: { type: "v2", value: new THREE.Vector2(1, 2) },
+      },
+      fragmentShader:
+        sNoise +
+        `
             // Insert fragment shader code here
             vec3 rgb(float r, float g, float b) {
                 return vec3(r / 255., g / 255., b / 255.);
@@ -170,9 +199,9 @@ function AnimatedGradientBackground(props) {
                 gl_FragColor = vec4(color, 1.0);
             }
           `,
-        vertexShader:
-          sNoise +
-          `
+      vertexShader:
+        sNoise +
+        `
             // Insert vertex shader code here
             uniform float u_time;
             uniform vec2 u_randomisePosition;
@@ -192,68 +221,67 @@ function AnimatedGradientBackground(props) {
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
             }
           `,
-      });
+    });
 
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(0, 0, 0);
-      mesh.scale.multiplyScalar(4);
-      mesh.rotation.x = -1.8;
-      mesh.rotation.y = 0.0;
-      mesh.rotation.z = -0.3;
-      scene.add(mesh);
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(0, 0, 0);
+    mesh.scale.multiplyScalar(4);
+    mesh.rotation.x = -1.8;
+    mesh.rotation.y = 0.0;
+    mesh.rotation.z = -0.3;
+    scene.add(mesh);
 
-      const animate = () => {
-        requestAnimationFrame(animate);
-        controls.update();
-        renderer.render(scene, camera);
+    const animate = () => {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
 
-        mesh.material.uniforms.u_randomisePosition.value = new THREE.Vector2(
-          j,
-          j
-        );
+      mesh.material.uniforms.u_randomisePosition.value = new THREE.Vector2(
+        j,
+        j
+      );
 
-        mesh.material.uniforms.u_color1.value = new THREE.Vector3(
-          R(x, y, t / 2),
-          G(x, y, t / 2),
-          B(x, y, t / 2)
-        );
+      mesh.material.uniforms.u_color1.value = new THREE.Vector3(
+        R(x, y, t / 2),
+        G(x, y, t / 2),
+        B(x, y, t / 2)
+      );
 
-        mesh.material.uniforms.u_time.value = t;
+      mesh.material.uniforms.u_time.value = t;
 
-        if (t % 0.1 === 0) {
-          if (vCheck === false) {
-            x -= 1;
-            if (x <= 0) {
-              vCheck = true;
-            }
-          } else {
-            x += 1;
-            if (x >= 32) {
-              vCheck = false;
-            }
+      if (t % 0.1 === 0) {
+        if (vCheck === false) {
+          x -= 1;
+          if (x <= 0) {
+            vCheck = true;
+          }
+        } else {
+          x += 1;
+          if (x >= 32) {
+            vCheck = false;
           }
         }
+      }
 
-        j += 0.001;
-        t += 0.01;
-      };
+      j += 0.001;
+      t += 0.015;
+    };
 
-      let t = 0;
-      let j = 0;
-      let x = randomInteger(0, 32);
-      let y = randomInteger(0, 32);
+    let t = 0;
+    let j = 0;
+    let x = randomInteger(0, 32);
+    let y = randomInteger(0, 32);
 
-      animate();
+    animate();
 
-      return () => {
-        renderer.dispose();
-      };
-    }
-  }, []);
+    return () => {
+      renderer.dispose();
+    };
+  };
 
   return (
     <div ref={containerRef} className="relative w-screen h-screen">
-        <div className="absolute top-0 left-0 w-screen h-screen bg-black opacity-20" />
+      <div className="absolute top-0 left-0 w-screen h-screen bg-black opacity-20" />
       <div className="absolute top-0 left-0 w-screen h-screen">
         {props.children}
       </div>
