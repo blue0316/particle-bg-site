@@ -50,7 +50,7 @@ function AnimatedGradientBackground(props) {
       0.1,
       1000
     );
-    camera.position.y = 300;
+    camera.position.y = 350;
 
     // Create a WebGLRenderer
     const renderer = new THREE.WebGLRenderer();
@@ -63,10 +63,10 @@ function AnimatedGradientBackground(props) {
     const controls = new OrbitControls(camera, renderer.domElement);
 
     // Set the controls target to the center of the scene
-    controls.target.set(0, 0, 0);
+    controls.target.set(0, 100, 0);
 
     // Disable controls to prevent further user interaction
-    controls.enabled = false;
+    controls.enabled = true;
 
     // Enable damping for smooth animations
     controls.enableDamping = true;
@@ -83,21 +83,21 @@ function AnimatedGradientBackground(props) {
     };
 
     const R = (x, y, t) => {
-      return Math.floor(192 + 64 * Math.cos((x * x - y * y) / 300 + t));
+      return Math.floor(184 + 72 * Math.cos((x * x - y * y) / 300 + t));
     };
 
     const G = (x, y, t) => {
       return Math.floor(
-        192 +
-          64 *
+        184 +
+          72 *
             Math.sin((x * x * Math.cos(t / 4) + y * y * Math.sin(t / 3)) / 300)
       );
     };
 
     const B = (x, y, t) => {
       return Math.floor(
-        192 +
-          64 *
+        184 +
+          72 *
             Math.sin(
               5 * Math.sin(t / 9) +
                 ((x - 100) * (x - 100) + (y - 100) * (y - 100)) / 1100
