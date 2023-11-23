@@ -40,38 +40,6 @@ function AnimatedGradientBackground(props) {
   }, [width, height]);
 
   const makeCanvas = () => {
-    // Create a scene
-    const scene = new THREE.Scene();
-
-    // Create a perspective camera
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    camera.position.y = 350;
-
-    // Create a WebGLRenderer
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    // Append the renderer's DOM element to the container
-    containerRef.current.appendChild(renderer.domElement);
-
-    // Create OrbitControls and pass the camera and renderer
-    const controls = new OrbitControls(camera, renderer.domElement);
-
-    // Set the controls target to the center of the scene
-    controls.target.set(0, 100, 0);
-
-    // Disable controls to prevent further user interaction
-    controls.enabled = true;
-
-    // Enable damping for smooth animations
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.25;
-
     let vCheck = false;
 
     const randomInteger = (min, max) => {
@@ -104,6 +72,38 @@ function AnimatedGradientBackground(props) {
             )
       );
     };
+
+    // Create a scene
+    const scene = new THREE.Scene();
+
+    // Create a perspective camera
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    camera.position.y = 350;
+
+    // Create a WebGLRenderer
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    // Append the renderer's DOM element to the container
+    containerRef.current.appendChild(renderer.domElement);
+
+    // Create OrbitControls and pass the camera and renderer
+    const controls = new OrbitControls(camera, renderer.domElement);
+
+    // Set the controls target to the center of the scene
+    controls.target.set(0, randomInteger(75, 125), 0);
+
+    // Disable controls to prevent further user interaction
+    controls.enabled = true;
+
+    // Enable damping for smooth animations
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
 
     const sNoise = `
             // Insert snoise function here
@@ -142,10 +142,10 @@ function AnimatedGradientBackground(props) {
         `;
 
     const geometry = new THREE.PlaneGeometry(
-      Math.max(window.innerWidth / 2, 400),
-      Math.max(window.innerHeight / 2.5, 400),
-      100,
-      100
+      window.innerWidth / 2,
+      window.innerHeight / 2,
+      window.innerWidth / 2,
+      window.innerHeight / 2
     );
     const material = new THREE.ShaderMaterial({
       uniforms: {
@@ -215,7 +215,7 @@ function AnimatedGradientBackground(props) {
                 vDistortion = snoise(vUv.xx * 3. - u_randomisePosition * 0.15);
                 xDistortion = snoise(vUv.yy * 1. - u_randomisePosition * 0.05);
                 vec3 pos = position;
-                pos.z += (vDistortion * 35.);
+                pos.z += (vDistortion * 10.);
                 pos.x += (xDistortion * 25.);
     
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
@@ -281,10 +281,10 @@ function AnimatedGradientBackground(props) {
 
   return (
     <div ref={containerRef} className="relative w-screen h-screen">
-      <div className="absolute top-0 left-0 w-screen h-screen bg-black opacity-20" />
+      {/* <div className="absolute top-0 left-0 w-screen h-screen bg-black opacity-20" />
       <div className="absolute top-0 left-0 w-screen h-screen">
         {props.children}
-      </div>
+      </div> */}
     </div>
   );
 }
