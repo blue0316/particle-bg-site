@@ -1,279 +1,43 @@
-<script>
-  window.onload = function() {
-    // Get the SVG element by its attribute
-    const ovalGraph = document.querySelector('[ovalGraph]');
-    // Get the path element
-    const path = ovalGraph.querySelector('path');
-    // Get the length of the path
-    const length = path.getTotalLength();
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
 
-    // Set the stroke-dasharray and stroke-dashoffset to the full length of the path
-    path.style.strokeDasharray = length;
-    path.style.strokeDashoffset = length;
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
 
-    // Function to set the progress of the stroke
-    function setProgress(percent) {
-      const drawLength = length * (percent / 100);
-      path.style.strokeDashoffset = length - drawLength;
-    }
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
 
-    // Declare the interval variable outside so it can be cleared from within the animateProgress function
-    let interval;
-
-    // Function to animate progress to a given target percentage
-    function animateProgress(targetPercentage) {
-      // If targetPercentage is less than 1, set it to 1
-      targetPercentage = Math.max(targetPercentage, 1);
-
-      // Reset progress if we're calling this function again
-      let progress = 0;
-      clearInterval(interval); // Clear any existing intervals
-
-      interval = setInterval(() => {
-        setProgress(progress);
-
-        if (progress >= targetPercentage) {
-          clearInterval(interval); // Stop the interval
-          setProgress(targetPercentage); // Ensure it's set to the exact target value
-        }
-
-        progress++; // Increment the progress
-      }, 5); // The duration between each increment
-    }
-
-    // Expose your animateProgress function to be callable globally
-    window.animateProgress = animateProgress;
-
-    // You can call animateProgress here with a default value to start
-    // animateProgress(50); // Starts the animation at 50%
-  }
-  
-  
-  
-  
-  
-// Function to format timestamp to "MMM DD, YYYY"
-function formatDate(timestamp) {
-    // Convert the timestamp to a number
-    const numericTimestamp = parseInt(timestamp, 10);
-    console.log('Numeric timestamp:', numericTimestamp); // Debug log
-
-    // Convert the numeric timestamp to a Date object
-    const date = new Date(numericTimestamp * 1000);
-    console.log('Converted Date:', date); // Debug log
-
-    // Format the date
-    const formattedDate = date.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' });
-    console.log('Formatted Date:', formattedDate); // Debug log
-
-    return formattedDate;
-}
-// Fetch the data
-fetch('https://dw-app-a83a83790d97.herokuapp.com/api/getFNGIndexCurrent')
-    .then(response => response.json())
-    .then(data => {
-        Object.keys(data).forEach(key => {
-            if (typeof data[key] === 'object' && data[key] !== null) {
-                // Handle nested objects (like 'now', 'yesterday', etc.)
-                Object.keys(data[key]).forEach(nestedKey => {
-                    let value = data[key][nestedKey];
-                    document.querySelectorAll(`[data-${key}-${nestedKey}]`).forEach(el => el.innerHTML = value);
-
-                    // Call animateProgress if it's the 'now' value
-                    if (key === 'now' && nestedKey === 'value') {
-                        animateProgress(parseInt(value, 10));
-                    }
-                });
-            } else {
-                // Handle non-nested values (like 'lastUpdated')
-                let value = key === 'lastUpdated' ? formatDate(data[key]) : data[key];
-                document.querySelectorAll(`[data-${key}]`).forEach(el => el.innerHTML = value);
-            }
-        });
-    })
-    .catch(error => console.error('Error fetching data:', error));
-</script>
-
-
-
-<script>
-var article = document.querySelector('#article');
-var toc = document.querySelector('#contents');
-	
-if(article && toc) {
-		
-var isInViewport = function (elem) {
-	
-    var bounding = elem.getBoundingClientRect();
-	
-    return (bounding.bottom <= ((window.innerHeight - (window.innerHeight / 2))));
-};
-		
-var tocH2 = document.querySelectorAll('h2');
-		
-function checkFocus() {
-				
-	var h2 = article.querySelectorAll('h2');
-	
-	for (var i = 0; i < h2.length; i++) {
-		
-		if (isInViewport(h2[i])) {
-			
-			var tocLink = toc.querySelectorAll('a');
-						
-			for (var x = 0; x < tocLink.length; x++) {
-				
-				if (x == i) { 
-				
-				      if (!tocLink[i].classList.contains('w--current')) {
-					     
-					currentActive = toc.querySelector('.w--current');
-					      
-					if (currentActive) { currentActive.classList.remove('w--current') }
-
-				        tocLink[i].classList.add('w--current');
-										      
-					break;
-					      					      
-				      }
-
-				}
-								
-			}
-					
-		}
-						
-	}
-	
-}
-	
-window.addEventListener("scroll", checkFocus);
-
-checkFocus();
-	
-}
-
-        function getCurrentPageUrlWithoutAnchors() {
-            return window.location.href.split('#')[0];
-        }
-
-        function setPageUrlToFields() {
-            const currentPageUrl = getCurrentPageUrlWithoutAnchors();
-            const urlFields = document.querySelectorAll('[display="url"]');
-
-            urlFields.forEach(field => {
-                field.value = currentPageUrl;
-            });
-        }
-
-        function copyPageUrlToClipboard() {
-            const currentPageUrl = getCurrentPageUrlWithoutAnchors();
-            const clipboardTempInput = document.createElement('input');
-            clipboardTempInput.style.position = 'absolute';
-            clipboardTempInput.style.left = '-9999px';
-            clipboardTempInput.value = currentPageUrl;
-            document.body.appendChild(clipboardTempInput);
-            clipboardTempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(clipboardTempInput);
-        }
-        setPageUrlToFields();
-
-        const copyElements = document.querySelectorAll('[copy="url"]');
-        copyElements.forEach(element => {
-            element.addEventListener('click', copyPageUrlToClipboard);
-        });
-
-    function formatDate(dateString) {
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const date = new Date(parseInt(dateString) * 1000);
-        const year = date.getFullYear() - 2000;
-        const day = date.getDate();
-        const monthIndex = date.getMonth();
-        return `${day} ${monthNames[monthIndex]} '${year}`;
-    }
-
-    async function fetchAndPopulateChart() {
-        const response = await fetch('https://dw-app-a83a83790d97.herokuapp.com/api/getFNGIndexHistory?limit=30');
-        const jsonData = await response.json();
-  
-        const labels = jsonData.map(item => formatDate(item.timestamp));
-        
-        const fngData = jsonData.map(item => parseInt(item.value));
-
-        const ctx = document.getElementById('gasPrice').getContext('2d');
-        const chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,  
-                datasets: [{
-                    label: 'Crypto Fear & Greed Index',
-                    borderColor: '#00CB00',
-                    backgroundColor: 'transparent',
-                    pointBackgroundColor: '#00CB00',
-                    pointStyle: 'circle',  
-                    pointRadius: 3,      
-                    borderWidth: 2, 
-            				data: fngData,
-                    fill: false
-                } ]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        display: false,
-                    },
-                    title: {
-                        display: false,
-                        text: 'Crypto Fear & Greed Index Over Time'
-                    },
-                },
-                responsive: true,
-                maintainAspectRatio: false, scales: {
-                    y: {
-                        beginAtZero: true,
-
-                        ticks: {
-                            font: {
-                                size: 12 
-                            },
-                        },
-                        title: {
-                            display: false,
-                            text: 'Value',
-                            font: {
-                                size: 12  
-                            }
-                        },
-                        grid: {
-                            color: '#F2F4F7',
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            font: {
-                                size: 12  
-                            }
-                        },
-                        title: {
-                            display: false,
-                            text: 'Date',
-                            font: {
-                                size: 12 
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.0)', 
-                        }
-                    }
-                }
-            }
-
-        });
-
-    }
-
-    fetchAndPopulateChart();
-
-
-</script>
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
