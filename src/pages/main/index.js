@@ -61,7 +61,7 @@ function MainPage() {
         </div>
         <p
           className={cn({
-            "text-red-500 w-[320px] lg:w-[420px] text-left px-4 mt-1 font-normal": true,
+            "text-red-500 w-[240px] lg:w-[315px] text-left px-3 mt-[3px] font-normal": true,
             "opacity-100 visible": error,
             "opacity-0 invisible": !error,
           })}
