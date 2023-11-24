@@ -96,10 +96,10 @@ function AnimatedGradientBackground(props) {
     const controls = new OrbitControls(camera, renderer.domElement);
 
     // Set the controls target to the center of the scene
-    controls.target.set(0, randomInteger(75, 125), 0);
+    controls.target.set(0, 0, 0);
 
     // Disable controls to prevent further user interaction
-    controls.enabled = false;
+    controls.enabled = true;
 
     // Enable damping for smooth animations
     controls.enableDamping = true;
@@ -142,10 +142,10 @@ function AnimatedGradientBackground(props) {
         `;
 
     const geometry = new THREE.PlaneGeometry(
-      window.innerWidth / 2,
-      window.innerHeight / 2,
-      window.innerWidth / 2,
-      window.innerHeight / 2
+      Math.max(window.innerWidth, window.innerHeight) / 2,
+      Math.max(window.innerWidth, window.innerHeight) / 2,
+      200,
+      200
     );
     const material = new THREE.ShaderMaterial({
       uniforms: {
@@ -212,23 +212,25 @@ function AnimatedGradientBackground(props) {
     
             void main() {
                 vUv = uv;
-                vDistortion = snoise(vUv.xx * 3. - u_randomisePosition * 0.15);
+                vDistortion = snoise(vUv.xx * 3. - u_randomisePosition * 0.05);
                 xDistortion = snoise(vUv.yy * 1. - u_randomisePosition * 0.05);
                 vec3 pos = position;
-                pos.z += (vDistortion * 10.);
-                pos.x += (xDistortion * 25.);
+                pos.z += (vDistortion * 3.);
+                pos.x += (xDistortion * 10.);
     
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
             }
           `,
     });
 
+    // Math.pow(-1, Math.random() > 0.5 ? 1 : 0)
+
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(0, 0, 0);
     mesh.scale.multiplyScalar(4);
-    mesh.rotation.x = -1.8;
+    mesh.rotation.x = -1.57;
     mesh.rotation.y = 0.0;
-    mesh.rotation.z = -0.3;
+    mesh.rotation.z = 0;
     scene.add(mesh);
 
     const animate = () => {
@@ -248,6 +250,8 @@ function AnimatedGradientBackground(props) {
       );
 
       mesh.material.uniforms.u_time.value = t;
+
+      mesh.rotation.z += 0.001;
 
       if (t % 0.1 === 0) {
         if (vCheck === false) {

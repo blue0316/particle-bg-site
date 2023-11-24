@@ -25,7 +25,7 @@ function MainPage() {
       <div className="flex flex-col justify-center items-center h-screen">
         <div
           className={cn({
-            "flex relative flex-row items-center w-[320px] lg:w-[420px] bg-white border border-solid hover:border-[#ddd] focus:border-[#000] rounded-[26px] text-[#333] outline-0": true,
+            "flex relative flex-row items-center w-[240px] lg:w-[315px] bg-white border border-solid hover:border-[#ddd] focus:border-[#000] rounded-[26px] text-[#333] outline-0": true,
             "!border-red-500": error,
             "border-white": !error,
           })}
@@ -35,7 +35,7 @@ function MainPage() {
             name="password"
             autoFocus={true}
             placeholder="Enter password..."
-            className="rounded-l-[26px] border-none text-[#333] text-[18px] leading-none outline-0 px-[25px] py-[15px] lg:w-[326px] w-[226px]"
+            className="rounded-l-[26px] border-none text-[#333] text-[14px] leading-none outline-0 px-[18px] py-[12px] lg:w-[244px] w-[170px]"
             onChange={(e) => {
               setPassword(e.target.value);
               if (e.target.value !== "") setActive(true);
@@ -50,7 +50,7 @@ function MainPage() {
           <button
             type="button"
             className={cn({
-              "w-fit h-10 lg:mr-[7px] text-[15px] text-white font-bold px-[20px] pb-px rounded-full transition-all duration-300": true,
+              "w-fit h-[34px] lg:mr-[6px] text-[12px] text-white font-bold px-[20px] pb-px rounded-full transition-all duration-300": true,
               "bg-black": active,
               "bg-[#222] bg-opacity-20 cursor-not-allowed": !active,
             })}
