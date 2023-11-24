@@ -35,7 +35,7 @@ function MainPage() {
             name="password"
             autoFocus={true}
             placeholder="Enter password..."
-            className="rounded-l-[26px] border-none text-[#333] text-[14px] leading-none outline-0 px-[18px] py-[12px] lg:w-[244px] w-[170px]"
+            className="rounded-l-[26px] border-none text-[#333] text-[14px] leading-none outline-0 px-[18px] py-[12px] lg:w-[244px] w-[157px]"
             onChange={(e) => {
               setPassword(e.target.value);
               if (e.target.value !== "") setActive(true);
