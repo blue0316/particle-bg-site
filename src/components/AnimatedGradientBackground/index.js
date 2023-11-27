@@ -87,6 +87,7 @@ function AnimatedGradientBackground(props) {
 
     // Create a WebGLRenderer
     const renderer = new THREE.WebGLRenderer();
+    console.log(renderer);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     // Append the renderer's DOM element to the container
