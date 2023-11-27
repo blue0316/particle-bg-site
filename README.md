@@ -1,70 +1,56 @@
-# Getting Started with Create React App
+# Installation Guide for Node.js and Running a React Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This README provides a step-by-step guide to installing the Node.js environment on a Windows machine and running a React project.
 
-## Available Scripts
+## Installing Node.js on Windows
 
-In the project directory, you can run:
+### Step 1: Download Node.js Installer
 
-### `npm start`
+1. Go to the [Node.js download page](https://nodejs.org/en/download/).
+2. Select the Windows Installer option. It's recommended to download the LTS (Long Term Support) version for most users.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Step 2: Run the Installer
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Execute the downloaded .msi file.
+2. Follow the installer prompts, accept the license agreement, and keep the default installation settings.
+3. Ensure that the checkboxes for `npm` package manager and adding Node.js to PATH are checked.
 
-### `npm test`
+### Step 3: Verify Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Open a Command Prompt or PowerShell window.
+2. Type `node -v` and press Enter to check the Node.js version.
+3. Type `npm -v` and press Enter to check the npm version.
 
-### `npm run build`
+If both commands print version numbers, Node.js and npm have been successfully installed.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Running a React Project
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Step 1: Clone the React Project Repository
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Navigate to the directory where you want to run the actual React project repository.
 
-### `npm run eject`
+### Step 2: Install Project Dependencies
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Change into the project directory using: `cd react-project-name`
+2. Install all required npm packages by running: `npm install`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Step 3: Start the Development Server
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Once the dependencies are installed, start the project with: `npm start`
+2. This command will launch the React application in your default web browser at `http://localhost:3000/`.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+The development server will automatically reload if you make edits to the code.
 
-## Learn More
+**_Note:_** To stop the server and exit the process, press `Ctrl + C` in the terminal.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+With these steps, you can set up the Node.js environment on your Windows system and run your existing React project.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Change Font Style
 
-### Code Splitting
+### 1st, Change font family.
+1. Open App.css file in src folder.
+2. You can find the font family on that file.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 2nd, Change font size.
+1. Navigate to text which you want to change.
+2. You can find classname for font size and change font size using that class.

@@ -1,17 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* @tailwind directives are used to inject Tailwind's base, components, and utility styles into the CSS.
+   This is required when using Tailwind CSS in your project for it to function properly. */
 
+@tailwind base; /* Injects Tailwind's base styles, which includes a reset and normalizing of styles across browsers. */
+@tailwind components; /* Injects Tailwind's component classes, which you can customize within the Tailwind config file. */
+@tailwind utilities; /* Injects Tailwind's utility classes, which is a large part of its functional CSS approach. */
+
+/* The following rules define the base styling for the body element of the document. */
 body {
-  margin: 0;
+  margin: 0; /* Removes the default margin around the <body> element. */
+  /* Specifies a list of font-families for the browser to use in order of preference. It covers a wide range of systems. */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased; /* Improves the legibility of fonts on MacOS and iOS by antialiasing them. */
+  -moz-osx-font-smoothing: grayscale; /* Improves the legibility of fonts on Firefox on MacOS by applying a grayscale antialiasing method. */
 }
 
+/* The following rule sets the default font family for elements wrapped in `code` tags, often used for displaying code snippets. */
 code {
+  /* Specifies a stack of preferred monospaced fonts for displaying code optimally. */
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }

@@ -1,3 +1,8 @@
+/* The @font-face rules are used to define custom fonts for use within the website. 
+   There are different font-face definitions for various unicode ranges to support different languages. */
+
+/* This font-face definition is for Cyrillic Extended characters. */
+
 /* cyrillic-ext */
 @font-face {
   font-family: 'Hanken Grotesk';
@@ -31,42 +36,48 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+/* CSS styles for the application's root component container. */
 .App {
-  text-align: center;
-  font-family: "Hanken Grotesk", sans-serif;
+  text-align: center; /* Centers the text inside the .App container. */
+  font-family: "Hanken Grotesk", sans-serif; /* Sets the default font family with a fallback to sans-serif. */
 }
 
+/* CSS styles specifically for the logo within the app. */
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+  height: 40vmin; /* Sets the logo height relative to the viewport size. */
+  pointer-events: none; /* Disables pointer events like mouse clicks and hovers on the logo. */
 }
 
+/* Apply an animation to the .App-logo element when the user has not expressed a preference for reduced motion. */
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    animation: App-logo-spin infinite 20s linear; /* Refers to the defined keyframes animation for continuous spinning. */
   }
 }
 
+/* CSS styles for the header part of the application. */
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-color: #282c34; /* Sets the background color of the header. */
+  min-height: 100vh; /* Minimum height for the header is the full viewport height. */
+  display: flex; /* Uses flexbox layout to organize children elements. */
+  flex-direction: column; /* Aligns children elements in a column—top to bottom. */
+  align-items: center; /* Centers children horizontally in the flex container. */
+  justify-content: center; /* Centers children vertically in the flex container. */
+  font-size: calc(10px + 2vmin); /* Calculates font size based on viewport width, responsive design. */
+  color: white; /* Sets text color within the header to white. */
 }
 
+/* Styles for links inside the application, setting their color. */
 .App-link {
-  color: #61dafb;
+  color: #61dafb; /* A light blue color for links providing contrast against the darker background. */
 }
 
+/* Animation keyframes for the App-logo-spin animation that rotates the logo. */
 @keyframes App-logo-spin {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg); /* Starting rotation at 0 degrees. */
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg); /* Rotates the element 360 degrees from the initial state. */
   }
 }

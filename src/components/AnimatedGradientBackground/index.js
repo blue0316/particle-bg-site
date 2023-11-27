@@ -1,60 +1,81 @@
+// Import necessary hooks and components from React library
 import React, { useEffect, useRef, useState } from "react";
+// Import the core Three.js library
 import * as THREE from "three";
+// Import OrbitControls which allows the camera to orbit around a target
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
+// Define a functional component to create an animated gradient background
 function AnimatedGradientBackground(props) {
+  // Create a mutable ref object to store the container DOM element
   const containerRef = useRef(null);
 
+  // State variables for storing window dimensions
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
 
+  // Handler function that updates width and height state based on window size
   const handleResize = () => {
     setWidth(window.innerWidth);
     setHeight(window.innerHeight);
   };
 
+  // Effect hook for setting up and cleaning up the canvas and window resize event
   useEffect(() => {
+    // Query for a canvas element in the document
     const canvasElement = document.querySelector("canvas");
+    // If there is no existing canvas, call makeCanvas to create one
     if (!canvasElement) {
       makeCanvas();
     }
 
-    // Initial setup
+    // Perform an initial resize operation
     handleResize();
 
-    // Add event listener for window resize
+    // Add a 'resize' event listener to the window that calls handleResize
     window.addEventListener("resize", handleResize);
 
-    // Clean up the event listener on component unmount
+    // Specify cleanup logic for removing the event listener when unmounting the component
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, []); // Empty dependency array ensures this effect runs once on mount
 
+  // Effect hook for re-rendering the canvas on window resize by listening to changes in width and height
   useEffect(() => {
+    // Query for a canvas element in the document
     const canvasElement = document.querySelector("canvas");
+    // If a canvas exists, remove it before creating a new one
     if (canvasElement) {
       canvasElement.remove();
     }
+    // Call makeCanvas to create and append a new canvas
     makeCanvas();
-  }, [width, height]);
+  }, [width, height]); // Dependencies on width and height ensure this effect runs when they change
 
+  // Function that creates the canvas and sets up the Three.js scene, camera, and renderer
   const makeCanvas = () => {
+    // Local variable to track vertical direction of color oscillation
     let vCheck = false;
 
+    // Helper function to generate a random integer between min and max (inclusive)
     const randomInteger = (min, max) => {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     };
 
+    // Helper function to build a Three.js Vector3 from RGB values
     const rgb = (r, g, b) => {
       return new THREE.Vector3(r, g, b);
     };
 
+    // Functions that calculate RGB channel values based on position (x, y) and time (t)
     const R = (x, y, t) => {
+      // Produces a red-ish shade varying with x, y, and t
       return Math.floor(184 + 72 * Math.cos((x * x - y * y) / 300 + t));
     };
 
     const G = (x, y, t) => {
+      // Produces a green-ish shade varying differently with x, y, and t
       return Math.floor(
         184 +
           72 *
@@ -63,6 +84,7 @@ function AnimatedGradientBackground(props) {
     };
 
     const B = (x, y, t) => {
+      // Produces a blue-ish shade varying differently with x, y, and t
       return Math.floor(
         184 +
           72 *
@@ -73,39 +95,39 @@ function AnimatedGradientBackground(props) {
       );
     };
 
-    // Create a scene
+    // Scene setup starts here
+
+    // Create a Three.js scene
     const scene = new THREE.Scene();
 
-    // Create a perspective camera
+    // Create a perspective camera with aspect ratio based on window size
     const camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
     );
+    // Set the initial Y position for the camera
     camera.position.y = 350;
 
-    // Create a WebGLRenderer
+    // Create a WebGLRenderer for rendering the scene with Three.js
     const renderer = new THREE.WebGLRenderer();
-    console.log(renderer);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    // Append the renderer's DOM element to the container
+    // Append the renderer's DOM element (the canvas) to the container in our React component
     containerRef.current.appendChild(renderer.domElement);
 
-    // Create OrbitControls and pass the camera and renderer
+    // Initialize OrbitControls allowing user to interact with the scene using mouse or touchscreen
     const controls = new OrbitControls(camera, renderer.domElement);
-
     // Set the controls target to the center of the scene
     controls.target.set(0, 0, 0);
-
-    // Disable controls to prevent further user interaction
+    // Allow the controls to be used by the user
     controls.enabled = true;
-
-    // Enable damping for smooth animations
+    // Enable damping (inertia) for smoother control interaction
     controls.enableDamping = true;
     controls.dampingFactor = 0.25;
 
+    // Placeholder scalar noise function definition to be used in shaders
     const sNoise = `
             // Insert snoise function here
             vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -142,6 +164,7 @@ function AnimatedGradientBackground(props) {
             }
         `;
 
+    // Create the geometry for the plane that will display the gradient
     const geometry = new THREE.PlaneGeometry(
       Math.max(window.innerWidth, window.innerHeight) / 2,
       Math.max(window.innerWidth, window.innerHeight) / 2,
@@ -149,7 +172,11 @@ function AnimatedGradientBackground(props) {
       200
     );
 
+    // ShaderMaterial setup starts here
+
+    // Create a shader material defining uniforms and shaders
     const material = new THREE.ShaderMaterial({
+      // Definitions of uniforms (global variables) used in shaders
       uniforms: {
         u_bg: { type: "v3", value: rgb(162, 138, 241) },
         u_bgMain: { type: "v3", value: rgb(162, 138, 241) },
@@ -158,6 +185,7 @@ function AnimatedGradientBackground(props) {
         u_time: { type: "f", value: 30 },
         u_randomisePosition: { type: "v2", value: new THREE.Vector2(1, 2) },
       },
+      // Fragment shader code responsible for pixel coloring
       fragmentShader:
         sNoise +
         `
@@ -201,6 +229,7 @@ function AnimatedGradientBackground(props) {
                 gl_FragColor = vec4(color, 1.0);
             }
           `,
+      // Vertex shader code responsible for vertex positioning
       vertexShader:
         sNoise +
         `
@@ -225,19 +254,25 @@ function AnimatedGradientBackground(props) {
           `,
     });
 
+    // Creation of mesh combining plane geometry and shader material
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(0, 0, 0);
     mesh.scale.multiplyScalar(4);
-    mesh.rotation.x = -1.57;
+    mesh.rotation.x = -1.57; // Rotate to lay flat
     mesh.rotation.y = 0.0;
     mesh.rotation.z = 0;
+    // Add the mesh to the scene
     scene.add(mesh);
 
+    // Animation loop for updating the scene and rendering
     const animate = () => {
       requestAnimationFrame(animate);
+      // Update controls based on user interactions
       controls.update();
+      // Render the scene with the camera
       renderer.render(scene, camera);
 
+      // Update uniforms and other properties for animation
       mesh.material.uniforms.u_randomisePosition.value = new THREE.Vector2(
         j,
         j
@@ -267,22 +302,27 @@ function AnimatedGradientBackground(props) {
         }
       }
 
+      // Increment variables controlling the animation
       j += 0.001;
       t += 0.015;
     };
 
-    let t = 0;
-    let j = 0;
-    let x = randomInteger(0, 32);
-    let y = randomInteger(0, 32);
+    // Variables used within the animation
+    let t = 0;      // Time variable for animation
+    let j = 0;      // Offset variable for animation
+    let x = randomInteger(0, 32); // Starting X position for color calculations
+    let y = randomInteger(0, 32); // Starting Y position for color calculations
 
+    // Start the animation loop
     animate();
 
+    // Return a cleanup function to dispose of resources when the component is unmounted
     return () => {
       renderer.dispose();
     };
   };
 
+  // Render JSX for the component containing a div to hold the canvas and any children passed into this component
   return (
     <div ref={containerRef} className="relative w-screen h-screen">
       <div className="absolute top-0 left-0 w-screen h-screen bg-black opacity-20" />
@@ -293,4 +333,5 @@ function AnimatedGradientBackground(props) {
   );
 }
 
+// Export the component wrapped in React.memo for performance optimization
 export default React.memo(AnimatedGradientBackground);
