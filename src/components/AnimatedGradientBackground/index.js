@@ -147,6 +147,7 @@ function AnimatedGradientBackground(props) {
       200,
       200
     );
+
     const material = new THREE.ShaderMaterial({
       uniforms: {
         u_bg: { type: "v3", value: rgb(162, 138, 241) },
@@ -223,8 +224,6 @@ function AnimatedGradientBackground(props) {
           `,
     });
 
-    // Math.pow(-1, Math.random() > 0.5 ? 1 : 0)
-
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(0, 0, 0);
     mesh.scale.multiplyScalar(4);
@@ -285,7 +284,7 @@ function AnimatedGradientBackground(props) {
 
   return (
     <div ref={containerRef} className="relative w-screen h-screen">
-      <div className="absolute top-0 left-0 w-screen h-screen bg-black opacity-20" />
+      {/* <div className="absolute top-0 left-0 w-screen h-screen bg-black opacity-20" /> */}
       <div className="absolute top-0 left-0 w-screen h-screen">
         {props.children}
       </div>

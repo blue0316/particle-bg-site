@@ -23,6 +23,11 @@ function MainPage() {
   return (
     <AnimatedGradientBackground>
       <div className="flex flex-col justify-center items-center h-screen">
+        <iframe
+          title="Particle Animation"
+          src="http://localhost/"
+          className="absolute left-0 top-0 w-full h-full opacity-30"
+        />
         <div
           className={cn({
             "flex relative flex-row items-center w-[240px] lg:w-[315px] bg-white border border-solid hover:border-[#ddd] focus:border-[#000] rounded-[26px] text-[#333] outline-0": true,
