@@ -25,7 +25,7 @@ function MainPage() {
       <div className="flex flex-col justify-center items-center h-screen">
         <iframe
           title="Particle Animation"
-          src="https://particle-effect-bg-html.vercel.app/"
+          src="https://particle-bg-mdroob-html.vercel.app/"
           className="absolute left-0 top-0 w-full h-full opacity-30"
         />
         <div
