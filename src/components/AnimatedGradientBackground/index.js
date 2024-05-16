@@ -178,10 +178,10 @@ function AnimatedGradientBackground(props) {
     const material = new THREE.ShaderMaterial({
       // Definitions of uniforms (global variables) used in shaders
       uniforms: {
-        u_bg: { type: "v3", value: rgb(162, 138, 241) },
-        u_bgMain: { type: "v3", value: rgb(162, 138, 241) },
-        u_color1: { type: "v3", value: rgb(162, 138, 241) },
-        u_color2: { type: "v3", value: rgb(82, 31, 241) },
+        u_bg: { type: "v3", value: rgb(0, 122, 231) },
+        u_bgMain: { type: "v3", value: rgb(88, 212, 174) },
+        u_color1: { type: "v3", value: rgb(0, 83, 159) },
+        u_color2: { type: "v3", value: rgb(0, 83, 159) },
         u_time: { type: "f", value: 30 },
         u_randomisePosition: { type: "v2", value: new THREE.Vector2(1, 2) },
       },
