@@ -166,8 +166,10 @@ function AnimatedGradientBackground(props) {
 
     // Create the geometry for the plane that will display the gradient
     const geometry = new THREE.PlaneGeometry(
-      Math.max(window.innerWidth, window.innerHeight) / 2,
-      Math.max(window.innerWidth, window.innerHeight) / 2,
+      Math.max(window.innerWidth, window.innerHeight),
+      Math.max(window.innerWidth, window.innerHeight),
+      // Math.max(window.innerWidth, window.innerHeight) / 2,
+      // Math.max(window.innerWidth, window.innerHeight) / 2,
       200,
       200
     );
@@ -257,7 +259,7 @@ function AnimatedGradientBackground(props) {
     // Creation of mesh combining plane geometry and shader material
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(0, 0, 0);
-    mesh.scale.multiplyScalar(4);
+    mesh.scale.multiplyScalar(16);
     mesh.rotation.x = -1.57; // Rotate to lay flat
     mesh.rotation.y = 0.0;
     mesh.rotation.z = 0;
